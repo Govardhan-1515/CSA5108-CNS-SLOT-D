@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <string.h>
+
+void xor8(char *a, char *b, char *result) {
+    for (int i = 0; i < 8; i++)
+        result[i] = (a[i] == b[i]) ? '0' : '1';
+
+    result[8] = '\0';
+}
+
+/* Simple S-DES-like demonstration */
+void sdes(char *input, char *key, char *output) {
+    for (int i = 0; i < 8; i++)
+        output[i] = (input[i] == key[i]) ? '0' : '1';
+
+    output[8] = '\0';
+}
+
+void cbc_encrypt(char *plain, char *key, char *iv, char *cipher) {
+    char block[9], temp[9], enc[9];
+
+    for (int i = 0; i < 2; i++) {
+        strncpy(block, plain + i * 8, 8);
+        block[8] = '\0';
+
+        xor8(block, iv, temp);
+        sdes(temp, key, enc);
+
+        strncpy(cipher + i * 8, enc, 8);
+
+        strcpy(iv, enc);
+    }
+
+    cipher[16] = '\0';
+}
+
+void cbc_decrypt(char *cipher, char *key, char *iv, char *plain) {
+    char block[9], dec[9], temp[9], oldIV[9];
+
+    for (int i = 0; i < 2; i++) {
+        strncpy(block, cipher + i * 8, 8);
+        block[8] = '\0';
+
+        strcpy(oldIV, iv);
+
+        sdes(block, key, dec);
+        xor8(dec, oldIV, temp);
+
+        strncpy(plain + i * 8, temp, 8);
+
+        strcpy(iv, block);
+    }
+
+    plain[16] = '\0';
+}
+
+int main() {
+    char key[11], iv[9];
+    char plaintext[17], ciphertext[17], decrypted[17];
+
+    printf("Enter 10-bit key: ");
+    scanf("%10s", key);
+
+    printf("Enter 8-bit IV: ");
+    scanf("%8s", iv);
+
+    printf("Enter 16-bit plaintext: ");
+    scanf("%16s", plaintext);
+
+    char iv1[9], iv2[9];
+
+    strcpy(iv1, iv);
+    strcpy(iv2, iv);
+
+    cbc_encrypt(plaintext, key, iv1, ciphertext);
+
+    printf("\nCiphertext = %s\n", ciphertext);
+
+    cbc_decrypt(ciphertext, key, iv2, decrypted);
+
+    printf("Decrypted   = %s\n", decrypted);
+
+    return 0;
+}
