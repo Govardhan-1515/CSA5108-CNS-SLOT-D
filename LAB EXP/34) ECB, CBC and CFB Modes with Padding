@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char text[100];
+    int key, i, length, pad;
+
+    printf("Enter plaintext: ");
+    scanf("%99s", text);
+
+    printf("Enter key: ");
+    scanf("%d", &key);
+
+    length = strlen(text);
+    pad = 8 - (length % 8);
+
+    for (i = 0; i < pad; i++)
+        text[length + i] = pad;
+
+    length += pad;
+
+    printf("\nPadded encrypted data:\n");
+
+    for (i = 0; i < length; i++)
+        printf("%02X ", (unsigned char)text[i] ^ key);
+
+    printf("\n");
+
+    return 0;
+}
