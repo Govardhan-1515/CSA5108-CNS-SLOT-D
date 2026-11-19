@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+int main()
+{
+    int p, q, g, x, h;
+    int k1, k2, r1, r2, s1, s2;
+
+    printf("Enter p, q and g: ");
+    scanf("%d%d%d", &p, &q, &g);
+
+    printf("Enter private key x and message hash h: ");
+    scanf("%d%d", &x, &h);
+
+    printf("Enter two random values k1 and k2: ");
+    scanf("%d%d", &k1, &k2);
+
+    r1 = 1;
+    for (int i = 0; i < k1; i++)
+        r1 = (r1 * g) % p;
+    r1 %= q;
+
+    r2 = 1;
+    for (int i = 0; i < k2; i++)
+        r2 = (r2 * g) % p;
+    r2 %= q;
+
+    s1 = (h + x * r1) % q;
+    s1 = (s1 * k1) % q;
+
+    s2 = (h + x * r2) % q;
+    s2 = (s2 * k2) % q;
+
+    printf("\nFirst signature: (%d, %d)", r1, s1);
+    printf("\nSecond signature: (%d, %d)", r2, s2);
+
+    return 0;
+}
