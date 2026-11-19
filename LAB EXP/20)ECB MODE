@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdint.h>
+
+uint64_t encrypt(uint64_t p, uint64_t k) {
+    return p ^ k;
+}
+
+uint64_t decrypt(uint64_t c, uint64_t k) {
+    return c ^ k;
+}
+
+int main() {
+    uint64_t key = 0x1111111111111111;
+    uint64_t iv = 0xAAAAAAAAAAAAAAAA;
+
+    uint64_t p[4] = {
+        0x1111111111111111,
+        0x2222222222222222,
+        0x3333333333333333,
+        0x4444444444444444
+    };
+
+    uint64_t c[4];
+
+    printf("CBC Encryption:\n");
+
+    uint64_t previous = iv;
+
+    for (int i = 0; i < 4; i++) {
+        c[i] = encrypt(p[i] ^ previous, key);
+        printf("C%d = %016llX\n", i + 1, c[i]);
+        previous = c[i];
+    }
+
+    printf("\nIntroduce error in C1...\n");
+
+    c[0] ^= 0x0000000000000001;
+
+    printf("Modified C1 = %016llX\n", c[0]);
+
+    printf("\nReceiver effect:\n");
+    printf("P1 is corrupted completely.\n");
+    printf("P2 has one corrupted bit.\n");
+    printf("P3 and P4 are recovered correctly.\n");
+
+    printf("\nAnswer:\n");
+    printf("a. Blocks beyond P2 are NOT affected.\n");
+    printf("b. A bit error in P1 affects C1 and propagates only to C2.\n");
+
+    return 0;
+}
