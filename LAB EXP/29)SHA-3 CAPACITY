@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+int main()
+{
+    int rate = 1024;
+    int capacity = 576;
+    int laneSize = 64;
+    int lanes, i;
+
+    lanes = capacity / laneSize;
+
+    printf("SHA-3 State Analysis\n");
+    printf("--------------------\n");
+
+    printf("Total state size: 1600 bits\n");
+    printf("Rate: %d bits\n", rate);
+    printf("Capacity: %d bits\n", capacity);
+
+    printf("\nCapacity lanes:\n");
+
+    for (i = 1; i <= lanes; i++) {
+        printf("Lane %d: 64 bits (Initial value = 0)\n", i);
+    }
+
+    printf("\nTotal capacity lanes: %d\n", lanes);
+
+    return 0;
+}
