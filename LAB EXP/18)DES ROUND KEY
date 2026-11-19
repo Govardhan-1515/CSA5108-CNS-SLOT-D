@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdint.h>
+
+int shifts[16] =
+{1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1};
+
+uint32_t rotate28(uint32_t x, int s) {
+    x &= 0x0FFFFFFF;
+    return ((x << s) | (x >> (28 - s))) & 0x0FFFFFFF;
+}
+
+int main() {
+    uint32_t C, D;
+
+    printf("Enter 28-bit C in hexadecimal: ");
+    scanf("%x", &C);
+
+    printf("Enter 28-bit D in hexadecimal: ");
+    scanf("%x", &D);
+
+    C &= 0x0FFFFFFF;
+    D &= 0x0FFFFFFF;
+
+    printf("\nDES Key Generation\n");
+
+    for (int i = 0; i < 16; i++) {
+        C = rotate28(C, shifts[i]);
+        D = rotate28(D, shifts[i]);
+
+        uint32_t subkey1 = (C >> 4) & 0xFFFFFF;
+        uint32_t subkey2 = (D >> 4) & 0xFFFFFF;
+
+        printf("Round %2d: C = %07X  D = %07X\n",
+               i + 1, C, D);
+
+        printf("         First 24 bits : %06X\n", subkey1);
+        printf("         Second 24 bits: %06X\n", subkey2);
+    }
+
+    return 0;
+}
