@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+int main()
+{
+    char text[100];
+    int a, b, i, value;
+
+    printf("Enter plaintext: ");
+    scanf("%99s", text);
+
+    printf("Enter keys a and b: ");
+    scanf("%d%d", &a, &b);
+
+    if (a % 2 == 0 || a % 13 == 0) {
+        printf("Invalid key. Choose a coprime with 26.\n");
+        return 0;
+    }
+
+    printf("Encrypted text: ");
+
+    for (i = 0; text[i] != '\0'; i++) {
+        value = text[i] - 'A';
+        value = (a * value + b) % 26;
+        printf("%c", value + 'A');
+    }
+
+    return 0;
+}
