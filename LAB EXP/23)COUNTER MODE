@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <string.h>
+
+void xor8(char *a, char *b, char *result) {
+    for (int i = 0; i < 8; i++)
+        result[i] = (a[i] == b[i]) ? '0' : '1';
+
+    result[8] = '\0';
+}
+
+/* S-DES demonstration encryption */
+void sdes(char *input, char *key, char *output) {
+    for (int i = 0; i < 8; i++)
+        output[i] = (input[i] == key[i]) ? '0' : '1';
+
+    output[8] = '\0';
+}
+
+void increment(char *counter) {
+    for (int i = 7; i >= 0; i--) {
+        if (counter[i] == '0') {
+            counter[i] = '1';
+            break;
+        } else {
+            counter[i] = '0';
+        }
+    }
+}
+
+int main() {
+    char key[11];
+    char counter[9];
+    char plaintext[25];
+    char ciphertext[25] = "";
+
+    printf("Enter 10-bit key: ");
+    scanf("%10s", key);
+
+    printf("Enter starting counter: ");
+    scanf("%8s", counter);
+
+    printf("Enter 24-bit plaintext: ");
+    scanf("%24s", plaintext);
+
+    for (int i = 0; i < 3; i++) {
+        char block[9], keystream[9], encrypted[9];
+
+        strncpy(block, plaintext + i * 8, 8);
+        block[8] = '\0';
+
+        sdes(counter, key, keystream);
+
+        xor8(block, keystream, encrypted);
+
+        strcat(ciphertext, encrypted);
+
+        increment(counter);
+    }
+
+    printf("\nCiphertext = %s\n", ciphertext);
+
+    return 0;
+}
