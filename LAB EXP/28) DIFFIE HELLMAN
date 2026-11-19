@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+int power(int a, int b, int q)
+{
+    int result = 1;
+
+    while (b > 0) {
+        result = (result * a) % q;
+        b--;
+    }
+
+    return result;
+}
+
+int main()
+{
+    int q, alpha, xa, xb;
+    int ya, yb, ka, kb;
+
+    printf("Enter prime number q: ");
+    scanf("%d", &q);
+
+    printf("Enter primitive root alpha: ");
+    scanf("%d", &alpha);
+
+    printf("Enter Alice private key: ");
+    scanf("%d", &xa);
+
+    printf("Enter Bob private key: ");
+    scanf("%d", &xb);
+
+    ya = power(alpha, xa, q);
+    yb = power(alpha, xb, q);
+
+    ka = power(yb, xa, q);
+    kb = power(ya, xb, q);
+
+    printf("\nAlice public key: %d", ya);
+    printf("\nBob public key: %d", yb);
+    printf("\nAlice shared key: %d", ka);
+    printf("\nBob shared key: %d", kb);
+
+    return 0;
+}
