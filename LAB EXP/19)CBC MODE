@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdint.h>
+
+uint64_t encrypt_block(uint64_t data, uint64_t key) {
+    return data ^ key;
+}
+
+int main() {
+    int n;
+    uint64_t iv, key;
+    uint64_t p[20], c[20];
+
+    printf("Enter number of blocks: ");
+    scanf("%d", &n);
+
+    printf("Enter IV (hex): ");
+    scanf("%llx", &iv);
+
+    printf("Enter key (hex): ");
+    scanf("%llx", &key);
+
+    printf("Enter plaintext blocks:\n");
+
+    for (int i = 0; i < n; i++)
+        scanf("%llx", &p[i]);
+
+    uint64_t previous = iv;
+
+    printf("\nCBC Encryption:\n");
+
+    for (int i = 0; i < n; i++) {
+        c[i] = encrypt_block(p[i] ^ previous, key);
+
+        printf("P%d = %016llX  C%d = %016llX\n",
+               i + 1, p[i], i + 1, c[i]);
+
+        previous = c[i];
+    }
+
+    printf("\nChoice:\n");
+    printf("a. Security    : 3DES\n");
+    printf("b. Performance : DES\n");
+
+    return 0;
+}
