@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <string.h>
+
+void pad(char *input, char *output, int blockSize) {
+    int len = strlen(input);
+
+    strcpy(output, input);
+
+    output[len] = '1';
+    len++;
+
+    while (len % blockSize != 0) {
+        output[len] = '0';
+        len++;
+    }
+
+    output[len] = '\0';
+}
+
+int main() {
+    char plaintext[100], padded[200];
+
+    printf("Enter plaintext: ");
+    scanf("%s", plaintext);
+
+    pad(plaintext, padded, 8);
+
+    printf("\nOriginal plaintext : %s\n", plaintext);
+    printf("After padding      : %s\n", padded);
+
+    printf("\nModes:\n");
+    printf("1. ECB\n");
+    printf("2. CBC\n");
+    printf("3. CFB\n");
+
+    printf("\nPadding uses 1 followed by 0s.\n");
+    printf("A padding block is added even when input is complete.\n");
+
+    printf("\nMotivation: It makes the receiver able to determine\n");
+    printf("the exact end of the original message and prevents\n");
+    printf("ambiguity between real data and padding.\n");
+
+    return 0;
+}
