@@ -1,0 +1,33 @@
+#include <stdio.h>
+
+int power(int a, int b, int n)
+{
+    int result = 1;
+    while (b > 0) {
+        result = (result * a) % n;
+        b--;
+    }
+    return result;
+}
+
+int main()
+{
+    int e, n, c, i, value;
+
+    printf("Enter public key e and n: ");
+    scanf("%d%d", &e, &n);
+
+    printf("Enter encrypted character value: ");
+    scanf("%d", &c);
+
+    printf("\nPossible character matches:\n");
+
+    for (i = 0; i < 26; i++) {
+        value = power(i, e, n);
+
+        if (value == c)
+            printf("Character: %c\n", 'A' + i);
+    }
+
+    return 0;
+}
